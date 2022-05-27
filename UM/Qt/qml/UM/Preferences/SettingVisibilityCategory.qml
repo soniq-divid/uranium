@@ -40,7 +40,7 @@ Button {
                 id: label
                 anchors.verticalCenter: parent.verticalCenter
                 text: control.text
-                color: control.hovered ? palette.highlight : palette.buttonText
+                color: control.hovered ? [35, 35, 35, 255] : palette.buttonText
                 font.bold: true
             }
 
