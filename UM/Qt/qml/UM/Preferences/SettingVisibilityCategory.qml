@@ -25,7 +25,7 @@ Button {
                 height: (label.height / 2) | 0
                 width: height
                 source: control.checked ? UM.Theme.getIcon("ChevronSingleDown") : UM.Theme.getIcon("ChevronSingleRight");
-                color: control.hovered ? [35, 35, 35, 127] : palette.buttonText
+                color: control.hovered ? QColor(32, 45, 53) : palette.buttonText
             }
             UM.RecolorImage
             {

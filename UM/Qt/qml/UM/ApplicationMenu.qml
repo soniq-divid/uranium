@@ -27,7 +27,7 @@ Rectangle
     width: menu.__isNative ? 0 : menu.__contentItem.width
     height: menu.__isNative ? 0 : menu.__contentItem.height
 
-    color: QColor(32,45,53);
+    color: QColor(32, 45, 53);
 
     Keys.forwardTo: menu.__contentItem;
 
