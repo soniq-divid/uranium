@@ -25,7 +25,7 @@ Button {
                 height: (label.height / 2) | 0
                 width: height
                 source: control.checked ? UM.Theme.getIcon("ChevronSingleDown") : UM.Theme.getIcon("ChevronSingleRight");
-                color: control.hovered ? palette.highlight : palette.buttonText
+                color: control.hovered ? UM.Theme.getColor("primary_hover") : palette.buttonText
             }
             UM.RecolorImage
             {
@@ -33,14 +33,14 @@ Button {
                 height: label.height
                 width: height
                 source: control.iconSource
-                color: control.hovered ? palette.highlight : palette.buttonText
+                color: control.hovered ? UM.Theme.getColor("primary_hover") : palette.buttonText
             }
             Label
             {
                 id: label
                 anchors.verticalCenter: parent.verticalCenter
                 text: control.text
-                color: control.hovered ? palette.highlight : palette.buttonText
+                color: control.hovered ? UM.Theme.getColor("primary_hover") : palette.buttonText
                 font.bold: true
             }
 
