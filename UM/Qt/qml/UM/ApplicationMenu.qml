@@ -39,7 +39,24 @@ Rectangle
         {
             __contentItem.parent = menuBackground;
         }
+
+        style: MenuBarStyle {
+            itemDelegate: Rectangle {
+                implicitWidth: lab.contentWidth * 1.4
+                implicitHeight: lab.contentHeight
+                color: styleData.selected || styleData.open ? "#202D35" : "transparent"
+                Label {
+                    id: lab
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    color: styleData.selected || styleData.open ? "white" : "black"
+                    font.wordSpacing: 10
+                    text: styleData.text
+                }
+            }
+        }
     }
+
+
 
     SystemPalette
     {
