@@ -42,6 +42,12 @@ Rectangle
 
         style: MenuBarStyle {
             itemDelegate: Rectangle {
+                function replaceText(txt) {
+                    var index = txt.indexOf("&");
+                    if(index >= 0)
+                    txt = txt.replace(txt.substr(index, 2), ("<u>" + txt.substr(index + 1, 1) +"</u>"));
+                    return txt;
+                }                
                 implicitWidth: lab.contentWidth * 1.4
                 implicitHeight: lab.contentHeight
                 color: styleData.selected || styleData.open ? "#202D35" : "transparent"
@@ -50,7 +56,7 @@ Rectangle
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: styleData.selected || styleData.open ? "white" : "black"
                     font.wordSpacing: 10
-                    text: styleData.text
+                    text: replaceText(styleData.text)
                 }
             }
         }
