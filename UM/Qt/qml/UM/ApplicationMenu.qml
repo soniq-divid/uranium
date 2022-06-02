@@ -3,7 +3,7 @@
 
 import QtQuick 2.1
 import QtQuick.Controls 1.1
-
+import QtQuick.Controls.Styles 1.3
 /**
  * This is a workaround for lacking API in the QtQuick Controls MenuBar.
  * It replicates some of the functionality included in QtQuick Controls'
