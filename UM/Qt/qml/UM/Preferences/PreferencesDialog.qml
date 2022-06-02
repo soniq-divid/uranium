@@ -60,6 +60,20 @@ Dialog
                     base.currentPage = row;
                 }
             }
+            style: TableViewStyle {
+                itemDelegate: Rectangle {
+                    implicitHeight: lab.contentHeight
+                    implicitWidth: lab.contentWidth
+                    color: styleData.selected || styleData.open ? "#202d35" : "transparent"
+                    Label {
+                        id: lab
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        color: styleData.selected || styleData.open ? "white" : "black"
+                        font.wordSpacing: 10
+                        text: styleData.value
+                    }
+                }
+            }
         }
 
         StackView {

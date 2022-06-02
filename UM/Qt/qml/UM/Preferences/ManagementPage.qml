@@ -126,7 +126,7 @@ PreferencesPage
                 {
                     width: objectListContainer.viewport.width
                     height: Math.round(childrenRect.height)
-                    color: ListView.isCurrentItem ? palette.highlight : index % 2 ? palette.base : palette.alternateBase
+                    color: ListView.isCurrentItem ? "#202d35" : index % 2 ? palette.base : palette.alternateBase
 
                     Label
                     {
@@ -136,7 +136,7 @@ PreferencesPage
                         text: model.name
                         elide: Text.ElideRight
                         font.italic: model.id == activeId
-                        color: parent.ListView.isCurrentItem ? palette.highlightedText : palette.text;
+                        color: parent.ListView.isCurrentItem ? "white" : "black";
                     }
 
                     MouseArea
