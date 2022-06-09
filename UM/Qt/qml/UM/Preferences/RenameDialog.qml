@@ -78,11 +78,10 @@ UM.Dialog
             text: catalog.i18nc("@action:button","Cancel")
             onClicked: base.reject()
             style: ButtonStyle {
-                border.color: styleData.selected ? UM.Theme.getColor("zmorph_grey_hover") : UM.Theme.getColor("zmorph_grey")
+                border.color: control.hovered ? UM.Theme.getColor("zmorph_grey_hover") : UM.Theme.getColor("zmorph_grey")
                 implicitWidth: 100
                 implicitHeight: 25
                 border.width: control.activeFocus ? 1.5 : 1
-                radius: 4
             }
         },
         Button
@@ -92,11 +91,10 @@ UM.Dialog
             enabled: base.validName
             isDefault: true
             style: ButtonStyle {
-                border.color: styleData.selected ? UM.Theme.getColor("zmorph_grey_hover") : UM.Theme.getColor("zmorph_grey")
+                border.color: control.hovered ? UM.Theme.getColor("zmorph_grey_hover") : UM.Theme.getColor("zmorph_grey")
                 implicitWidth: 100
                 implicitHeight: 25
                 border.width: control.activeFocus ? 1.5 : 1
-                radius: 4
             }
         }
     ]
