@@ -4,6 +4,7 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.3
+import UM 1.3 as UM
 /**
  * This is a workaround for lacking API in the QtQuick Controls MenuBar.
  * It replicates some of the functionality included in QtQuick Controls'
@@ -55,7 +56,7 @@ Rectangle
                     id: lab
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: styleData.selected || styleData.open ? "white" : "black"
-                    font.wordSpacing: 10
+                    font: UM.Theme.getFont("default")
                     text: replaceText(styleData.text)
                 }
             }
