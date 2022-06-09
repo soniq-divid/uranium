@@ -5,6 +5,7 @@ import QtQuick 2.1
 import QtQuick.Controls 1.1
 import QtQuick.Dialogs 1.2
 import QtQuick.Window 2.1
+import QtQuick.Controls.Styles 1.4
 
 import UM 1.1 as UM
 
@@ -54,6 +55,13 @@ UM.Dialog
             text: base.object
             maximumLength: 40
             onTextChanged: base.textChanged(text)
+            style: TextFieldStyle {
+                selectedTextColor: "white"
+                selectionColor: UM.Theme.getColor("zmorph_grey")
+                background: Rectangle {
+                    border.color: UM.Theme.getColor("zmorph_grey")
+                }
+            }
         }
 
         Label
@@ -69,6 +77,13 @@ UM.Dialog
             id: cancelButton
             text: catalog.i18nc("@action:button","Cancel")
             onClicked: base.reject()
+            style: ButtonStyle {
+                border.color: styleData.selected ? UM.Theme.getColor("zmorph_grey_hover") : UM.Theme.getColor("zmorph_grey")
+                implicitWidth: 100
+                implicitHeight: 25
+                border.width: control.activeFocus ? 1.5 : 1
+                radius: 4
+            }
         },
         Button
         {
@@ -76,6 +91,13 @@ UM.Dialog
             onClicked: base.accept()
             enabled: base.validName
             isDefault: true
+            style: ButtonStyle {
+                border.color: styleData.selected ? UM.Theme.getColor("zmorph_grey_hover") : UM.Theme.getColor("zmorph_grey")
+                implicitWidth: 100
+                implicitHeight: 25
+                border.width: control.activeFocus ? 1.5 : 1
+                radius: 4
+            }
         }
     ]
 }
