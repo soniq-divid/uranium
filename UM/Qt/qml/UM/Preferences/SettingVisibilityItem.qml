@@ -87,6 +87,7 @@ Item {
 
                 onClicked: definitionsModel.setVisible(definition.key, !check.checked)
             }
+            style: UM.Theme.styles.checkbox
         }
     }
 
