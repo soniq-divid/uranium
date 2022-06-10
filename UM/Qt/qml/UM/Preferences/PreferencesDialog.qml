@@ -69,7 +69,7 @@ Dialog
                         id: lab
                         anchors.horizontalCenter: parent.horizontalCenter
                         color: styleData.selected || styleData.open ? "white" : "black"
-                        font.wordSpacing: 10
+                        font: UM.Theme.getFont("default")
                         text: styleData.value
                     }
                 }
