@@ -3,6 +3,7 @@
 
 import QtQuick 2.1
 import QtQuick.Controls 1.1
+import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
 
@@ -42,7 +43,7 @@ Item {
             margins: 5 * screenScaleFactor;
         }
 
-        font.pointSize: 18;
+        font: UM.Theme.getFont("huge_bold")
     }
 
     Item {
