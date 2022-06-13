@@ -5,16 +5,16 @@ import json
 import os
 import sys
 import warnings
-from typing import Dict, Optional, List
+from typing import Dict, List
 
-from PyQt6.QtCore import QObject, pyqtProperty, pyqtSignal, QCoreApplication, QUrl, QSizeF
+from PyQt6.QtCore import QObject, pyqtSignal, QCoreApplication, QUrl, QSizeF
 from PyQt6.QtGui import QColor, QFont, QFontMetrics, QFontDatabase
-from PyQt6.QtQml import QQmlComponent, QQmlContext
 
 import UM.Application
 from UM.FlameProfiler import pyqtSlot
 from UM.Logger import Logger
 from UM.Resources import Resources
+from UM.Trust import TrustBasics
 
 
 class Theme(QObject):
@@ -45,6 +45,7 @@ class Theme(QObject):
 
         self._initializeDefaults()
 
+        self._check_if_trusted = False
         self.reload()
 
     themeLoaded = pyqtSignal()
@@ -66,10 +67,21 @@ class Theme(QObject):
             theme_path = Resources.getPath(Resources.Themes, application.getPreferences().getValue("general/theme"))
             self.load(theme_path)
 
+    def setCheckIfTrusted(self, check_if_trusted: bool):
+        """Set: Can themes from unbundled locations be selected, or only the ones packaged with the app?"""
+        self._check_if_trusted = check_if_trusted
+
     @pyqtSlot(result = "QVariantList")
     def getThemes(self) -> List[Dict[str, str]]:
+        install_prefix = os.path.abspath(UM.Application.Application.getInstance().getInstallPrefix())
+
         themes = []
         for path in Resources.getAllPathsForType(Resources.Themes):
+            if self._check_if_trusted and not TrustBasics.isPathInLocation(install_prefix, path):
+                # This will prevent themes to load from outside 'bundled' folders, when `check_if_trusted` is True.
+                # Note that this will be a lot less useful in newer versions supporting Qt 6, due to lack of QML Styles.
+                Logger.warning("Skipped indexing Theme from outside bundled folders: ", path)
+                continue
             try:
                 for file in os.listdir(path):
                     folder = os.path.join(path, file)
@@ -257,7 +269,7 @@ class Theme(QObject):
                 if font.get("bold"):
                     q_font.setBold(font.get("bold", False))
                 else:
-                    q_font.setWeight(font.get("weight", 50))
+                    q_font.setWeight(font.get("weight", 500))
 
                 q_font.setLetterSpacing(QFont.SpacingType.AbsoluteSpacing, font.get("letterSpacing", 0))
                 q_font.setItalic(font.get("italic", False))
@@ -284,8 +296,9 @@ class Theme(QObject):
                     for icon in icons:
                         name = os.path.splitext(icon)[0]
                         self._icons[detail_level][name] = QUrl.fromLocalFile(os.path.join(base_path, icon))
-            except EnvironmentError:  # Exception when calling os.walk, e.g. no access rights.
-                pass  # Won't get any icons then. Images will show as black squares.
+            except EnvironmentError as err:  # Exception when calling os.walk, e.g. no access rights.
+                Logger.error(f"Can't access icons of theme ({iconsdir}): {err}")
+                # Won't get any icons then. Images will show as black squares.
 
             deprecated_icons_file = os.path.join(iconsdir, "deprecated_icons.json")
             if os.path.isfile(deprecated_icons_file):
@@ -299,9 +312,13 @@ class Theme(QObject):
 
         imagesdir = os.path.join(path, "images")
         if os.path.isdir(imagesdir):
-            for image in os.listdir(imagesdir):
-                name = os.path.splitext(image)[0]
-                self._images[name] = QUrl.fromLocalFile(os.path.join(imagesdir, image))
+            try:
+                for image in os.listdir(imagesdir):
+                    name = os.path.splitext(image)[0]
+                    self._images[name] = QUrl.fromLocalFile(os.path.join(imagesdir, image))
+            except EnvironmentError as err:  # Exception when calling os.listdir, e.g. no access rights.
+                Logger.error(f"Can't access image of theme ({imagesdir}): {err}")
+                # Won't get any images then. They will show as black squares.
 
         Logger.log("d", "Loaded theme %s", path)
         Logger.info(f"System's em size is {self._em_height}px.")
