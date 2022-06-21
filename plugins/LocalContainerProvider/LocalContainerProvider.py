@@ -4,7 +4,6 @@
 import os  # For getting the IDs from a filename.
 import pickle  # For caching definitions.
 import re  # To detect back-up files in the ".../old/#/..." folders.
-import time
 import urllib.parse  # For interpreting escape characters using unquote_plus.
 from typing import Any, Dict, Iterable, Optional, Set, Tuple
 
@@ -57,10 +56,7 @@ class LocalContainerProvider(ContainerProvider):
         return self._id_to_path.keys()
 
     def getLastModifiedTime(self, container_id: str) -> float:
-        try:
-            return os.path.getmtime(self._id_to_path[container_id])
-        except OSError:  # File system can be corrupt.
-            return time.time()  # Pretend it just got modified.
+        return os.path.getmtime(self._id_to_path[container_id])
 
     def loadContainer(self, container_id: str) -> "ContainerInterface":
         # First get the actual (base) ID of the path we're going to read.

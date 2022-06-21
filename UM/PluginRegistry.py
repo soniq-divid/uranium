@@ -487,10 +487,10 @@ class PluginRegistry(QObject):
                             metadata = {}
                     plugin_object.setMetaData(metadata)
                     self._addPluginObject(plugin_object, plugin_id, plugin_type)
-            plugin_version = self._metadata[plugin_id].get("plugin", {}).get("version")
+
             self._plugins[plugin_id] = plugin
             self.enablePlugin(plugin_id)
-            Logger.info(f"Loaded plugin {plugin_id} {plugin_version}")
+            Logger.info("Loaded plugin %s", plugin_id)
 
         except Exception:
             self.removeCorruptedPluginMessage(plugin_id)

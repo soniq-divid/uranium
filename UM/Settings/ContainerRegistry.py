@@ -379,12 +379,7 @@ class ContainerRegistry(ContainerRegistryInterface):
         return self._db_connection
 
     def _getProfileType(self, container_id: str, db_cursor: db.Cursor) -> Optional[str]:
-        try:
-            db_cursor.execute("select id, container_type from containers where id = ?", (container_id, ))
-        except db.DatabaseError as e:
-            Logger.error(f"Could not access database: {e}. Is it corrupt? Recreating it.")
-            self._recreateCorruptDataBase(db_cursor)
-            return None
+        db_cursor.execute("select id, container_type from containers where id = ?", (container_id, ))
         row = db_cursor.fetchone()
         if row:
             return row[1]
@@ -462,7 +457,7 @@ class ContainerRegistry(ContainerRegistryInterface):
         for provider in self._providers:  # Automatically sorted by the priority queue.
             # Make copy of all IDs since it might change during iteration.
             provider_container_ids = set(provider.getAllIds())
-            # Keep a list of all the ID's that we know of
+            # Keep a list of all the ID's that we know off
             all_container_ids.update(provider_container_ids)
             for container_id in provider_container_ids:
                 try:
@@ -498,12 +493,7 @@ class ContainerRegistry(ContainerRegistryInterface):
 
                 else:
                     # Metadata already exists in database.
-                    try:
-                        modified_time = provider.getLastModifiedTime(container_id)
-                    except OSError:
-                        Logger.warning(f"Could not get last modified time of {container_id}.")
-                        # Record is purged below.
-                        continue
+                    modified_time = provider.getLastModifiedTime(container_id)
                     if modified_time > db_last_modified_time:
                         # Metadata is outdated, so load from file and update the database
                         metadata = provider.loadMetadata(container_id)
@@ -539,11 +529,7 @@ class ContainerRegistry(ContainerRegistryInterface):
             self._removeContainerFromDatabase(container_id)
 
         if ids_to_remove:  # We only can (and need to) commit again if we removed containers
-            try:
-                cursor.execute("commit")
-            except db.DatabaseError as e:  # E.g. read-only database, concurrent access, corrupt database.
-                Logger.error(f"Could not complete purging of removed containers: {str(e)}")
-                # Don't purge database. It's only for removing extra data, not critical, and it might just be a temporary problem.
+            cursor.execute("commit")
 
         Logger.log("d", "Loading metadata into container registry took %s seconds", time.time() - resource_start_time)
         gc.enable()

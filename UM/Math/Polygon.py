@@ -224,13 +224,9 @@ class Polygon:
             return None
 
         clipper = pyclipper.Pyclipper()
-        try:
-            clipper.AddPath(self._clipperPoints(), pyclipper.PT_SUBJECT, closed = True)
-            clipper.AddPath(other._clipperPoints(), pyclipper.PT_CLIP, closed = True)
-            intersection_points = clipper.Execute(pyclipper.CT_INTERSECTION)
-        except pyclipper.ClipperException:
-            # Invalid geometry, such as a zero-area polygon.
-            return None
+        clipper.AddPath(self._clipperPoints(), pyclipper.PT_SUBJECT, closed = True)
+        clipper.AddPath(other._clipperPoints(), pyclipper.PT_CLIP, closed = True)
+        intersection_points = clipper.Execute(pyclipper.CT_INTERSECTION)
 
         if len(intersection_points) == 0:
             return None

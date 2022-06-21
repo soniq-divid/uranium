@@ -51,9 +51,9 @@ class ConfigurationErrorMessage(Message):
             result = QMessageBox.question(None, i18n_catalog.i18nc("@title:window", "Reset to factory"),
                                           i18n_catalog.i18nc("@label",
                                                         "Reset will remove all your current printers and profiles! Are you sure you want to reset?"))
-            if result == QMessageBox.StandardButton.Yes:
+            if result == QMessageBox.Yes:
                 Resources.factoryReset()
-                self._application.closeApplication()
+                sys.exit(1)
 
     __instance = None   # type: ConfigurationErrorMessage
 
